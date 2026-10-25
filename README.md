@@ -18,23 +18,18 @@
 
 ## 📌 Overview
 
-Offline Ansible playbook, role, inventory & ansible.cfg security linter
+OAnsibleX is an offline, read-only security linter for Ansible projects, covering ansible.cfg, inventories, playbooks, roles, group/host vars and Galaxy requirements. It ships its own stdlib-only YAML-lite parser and never executes or modifies the files it scans, making it safe to run in CI. Findings are mapped to CWE and MITRE ATT&CK with remediation and an overall score/grade.
 
 ---
 
 ## ✨ Features
 
-- Stdlib-only YAML-lite parser — multi-document, lists of maps, block scalars (| > with chomping), flow collections, anchors/aliases/merge, !vault tags
-- ansible.cfg auditor — host_key_checking, log_path, vault_password_file, world-readable tmpfiles, callback leaks, pipelining/requiretty, ssh_args ...
-- INI + YAML inventory auditor — plaintext ansible_password / become / ssh pass (masked), StrictHostKeyChecking=no, root SSH user, WinRM
-- Playbook / role / task linter — curl|bash, shell injection, validate_certs, http URLs, GPG bypass, world-writable modes, plaintext user passwords, missing no_log, SELinux/firewall disabling, ...
-- group_vars / host_vars secret detection vs $ANSIBLE_VAULT; headers, private keys, cloud keys
-- Galaxy requirements — version pins, git commits, untrusted collection sources
-- CWE + MITRE ATT&CK mapping, remediation, score/grade
-- Inline suppression # oansiblex:ignore=ID
-- Export TXT / MD / JSON / CSV / SARIF 2.1.0
-- Self-test --demo (weak vs hardened projects)
-- Full CLI mode (--path, --fail-on, --explain ...) Read-only: never modifies scanned files.
+- Stdlib-only YAML-lite parser (multi-doc, anchors/aliases, block scalars, !vault)
+- Audits ansible.cfg, INI/YAML inventories, playbooks, roles and group/host vars
+- Detects curl|bash, shell injection, disabled TLS verification and plaintext secrets
+- Galaxy requirements review for unpinned versions and untrusted sources
+- CWE + MITRE ATT&CK mapping, scoring/grade and inline suppression
+- Exports TXT / Markdown / JSON / CSV / SARIF 2.1.0 with CI fail-on gates
 
 ---
 
@@ -48,7 +43,10 @@ Offline Ansible playbook, role, inventory & ansible.cfg security linter
 ## 🚀 Usage
 
 ```bash
-./OAnsibleX
+./OAnsibleX --path ./playbooks/
+./OAnsibleX -p site.yml --format sarif -o report.sarif --fail-on high
+./OAnsibleX --demo
+./OAnsibleX --help
 ```
 
 ---
